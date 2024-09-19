@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: crossplatform
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3309/cross_platform_db
