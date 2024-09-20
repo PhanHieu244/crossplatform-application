@@ -1,4 +1,4 @@
-package vn.edu.hust.project.crossplatform.entity.response;
+package vn.edu.hust.project.crossplatform.dto.response;
 
 import org.springframework.http.HttpStatus;
 

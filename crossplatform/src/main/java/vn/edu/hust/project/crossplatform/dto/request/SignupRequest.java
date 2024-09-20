@@ -1,4 +1,4 @@
-package vn.edu.hust.project.crossplatform.dto;
+package vn.edu.hust.project.crossplatform.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;

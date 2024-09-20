@@ -3,8 +3,13 @@ package vn.edu.hust.project.crossplatform.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import vn.edu.hust.project.crossplatform.dto.SignupRequest;
-import vn.edu.hust.project.crossplatform.entity.response.*;
+import vn.edu.hust.project.crossplatform.dto.request.SignupRequest;
+import vn.edu.hust.project.crossplatform.repository.mysql.AccountRepository;
+import vn.edu.hust.project.crossplatform.repository.mysql.LecturerRepository;
+import vn.edu.hust.project.crossplatform.repository.mysql.StudentRepository;
+import vn.edu.hust.project.crossplatform.repository.mysql.model.Account;
+import vn.edu.hust.project.crossplatform.repository.mysql.model.Lecturer;
+import vn.edu.hust.project.crossplatform.repository.mysql.model.Student;
 
 import java.util.Random;
 

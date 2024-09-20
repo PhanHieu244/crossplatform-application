@@ -1,4 +1,4 @@
-package vn.edu.hust.project.crossplatform.entity.response;
+package vn.edu.hust.project.crossplatform.repository.mysql.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "students")
-public class Student {
+@Table(name = "lecturers")
+public class Lecturer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
