@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import vn.edu.hust.project.crossplatform.entity.response.Resource;
+import vn.edu.hust.project.crossplatform.dto.response.Resource;
 import vn.edu.hust.project.crossplatform.exception.base.ApplicationException;
 import vn.edu.hust.project.crossplatform.exception.base.HttpFilterException;
 

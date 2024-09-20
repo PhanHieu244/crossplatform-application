@@ -1,4 +1,4 @@
-package vn.edu.hust.project.crossplatform.repository.mongo.model;
+package vn.edu.hust.project.crossplatform.repository.mysql.model;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

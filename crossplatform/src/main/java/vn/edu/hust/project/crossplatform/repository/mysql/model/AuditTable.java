@@ -1,4 +1,4 @@
-package vn.edu.hust.project.crossplatform.repository.mongo.model;
+package vn.edu.hust.project.crossplatform.repository.mysql.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
