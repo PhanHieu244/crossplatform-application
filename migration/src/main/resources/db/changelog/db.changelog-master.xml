@@ -6,8 +6,8 @@
         http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="00002_create_database.up" author="phanhieu244">
-        <sqlFile relativeToChangelogFile="true" path="../../db/mysql/00002_create_database.up.sql"/>
+    <changeSet id="00003_quan_create.up" author="quan">
+        <sqlFile relativeToChangelogFile="true" path="../../db/mysql/00003_quan_create.up.sql"/>
     </changeSet>
 </databaseChangeLog>
  
