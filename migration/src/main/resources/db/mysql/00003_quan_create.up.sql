@@ -1,6 +1,4 @@
-CREATE DATABASE app;
 
-USE app;
 
 -- Bảng tài khoản cá nhân
 CREATE TABLE accounts (
