@@ -9,7 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LogoutRequest {
+public class GetClassRequest {
     private String token;
+    private String role;
+    private int user_id;
 }
-
