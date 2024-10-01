@@ -7,14 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.edu.hust.project.crossplatform.constant.ResponseCode;
 import vn.edu.hust.project.crossplatform.dto.response.ApiResponse;
 import vn.edu.hust.project.crossplatform.dto.request.SignupRequest;
-import vn.edu.hust.project.crossplatform.dto.response.Resource;
-import vn.edu.hust.project.crossplatform.exception.EmailFormatException;
-import vn.edu.hust.project.crossplatform.exception.PasswordLengthException;
-import vn.edu.hust.project.crossplatform.exception.UserExistedException;
-import vn.edu.hust.project.crossplatform.exception.base.ApplicationException;
 import vn.edu.hust.project.crossplatform.service.AccountService;
 
 
@@ -29,28 +23,25 @@ public class AuthController {
     public ResponseEntity<?> signUp(@RequestBody SignupRequest signupRequest) {
         // Validate email format
         if (!isValidEmail(signupRequest.getEmail())) {
-            /*return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse(9995, "Invalid email format"));*/
-            throw new EmailFormatException();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(9995, "Invalid email format"));
         }
 
         // Validate password length
         if (signupRequest.getPassword().length() < 6 || signupRequest.getPassword().length() > 10) {
-            /*return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse(9994, "Password length must be between 6 and 10 characters"));*/
-            throw new PasswordLengthException();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(9994, "Password length must be between 6 and 10 characters"));
         }
 
         // Check if email already exists
         if (accountService.existsByEmail(signupRequest.getEmail())) {
-            /*return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ApiResponse(9996, "User existed"));*/
-            throw new UserExistedException();
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ApiResponse(9996, "User existed"));
         }
 
         // Register new account
         String verificationCode = accountService.registerNewAccount(signupRequest);
-        return ResponseEntity.ok(new Resource(verificationCode));
+        return ResponseEntity.ok(new ApiResponse(1000, "OK", verificationCode));
     }
 
     private boolean isValidEmail(String email) {
