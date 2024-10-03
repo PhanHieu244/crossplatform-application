@@ -12,5 +12,8 @@
     <changeSet id="00004.2" author="phanhieu244">
         <sqlFile relativeToChangelogFile="true" path="../../db/mysql/00004_update_class.up.sql"/>
     </changeSet>
+    <changeSet id="00005" author="phanhieu244">
+        <sqlFile relativeToChangelogFile="true" path="../../db/mysql/00005_update_sql.up.sql"/>
+    </changeSet>
 </databaseChangeLog>
  
