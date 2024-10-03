@@ -34,6 +34,12 @@ public class AuthService implements IAuthService {
     }
 
     @Override
+    public void checkRole(String token, Account.Role role) {
+        var account = getAccountByToken(token);
+        checkRole(account, role);
+    }
+
+    @Override
     public Account getAccountAndCheckRole(String token, Account.Role role) {
         var account = getAccountByToken(token);
         checkRole(account, role);

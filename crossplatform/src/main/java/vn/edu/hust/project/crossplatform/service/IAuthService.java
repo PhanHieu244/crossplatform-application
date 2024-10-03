@@ -8,6 +8,7 @@ public interface IAuthService {
     Account getAccountByToken(String token);
     void checkRole(Account account, Account.Role role);
     void checkRole(Account account, Account.Role... roles);
+    void checkRole(String token, Account.Role role);
     Account getAccountAndCheckRole(String token, Account.Role role);
     Boolean hasRole(String token, Account.Role role);
     Lecturer getLecturerByToken(String token);
