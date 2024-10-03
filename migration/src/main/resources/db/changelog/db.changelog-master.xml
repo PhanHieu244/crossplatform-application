@@ -9,5 +9,8 @@
     <changeSet id="00003" author="quan">
         <sqlFile relativeToChangelogFile="true" path="../../db/mysql/00003_quan_create.up.sql"/>
     </changeSet>
+    <changeSet id="00004.2" author="phanhieu244">
+        <sqlFile relativeToChangelogFile="true" path="../../db/mysql/00004_update_class.up.sql"/>
+    </changeSet>
 </databaseChangeLog>
  

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import vn.edu.hust.project.crossplatform.repository.mysql.model.Account;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long> {
+public interface AccountRepository extends JpaRepository<Account, Integer> {
     boolean existsByEmail(String email);
+
 }
