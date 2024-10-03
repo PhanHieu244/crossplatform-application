@@ -20,11 +20,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ClassDto extends BaseDto {
+    private String classId;
     private String className;
     private String schedule;
-    private Integer lectureId;
+    private Integer lecturerId;
     private Integer maxStudentAmount;
-    private String code;
     private String attachedCode;
     private ClassType classType;
     private LocalDate startDate;

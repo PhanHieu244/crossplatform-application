@@ -10,11 +10,11 @@ import vn.edu.hust.project.crossplatform.repository.mysql.model.Account;
 import java.util.List;
 
 public interface IClassService {
-    ClassDto createClass(CreateClassRequest request, Integer lecturerId);
+    ClassDto createClass(CreateClassRequest request);
     ClassDto editClass(EditClassRequest request);
-    void deleteClass(Integer classId);
-    void deleteClass(Integer classId, Integer lectureId);
-    ClassDto getClassById(Integer classId);
-    ClassDto getClassById(Integer classId, Account account);
+    void deleteClass(String code);
+    void deleteClass(String code, Account account);
+    ClassDto getClassByCode(String code);
+    ClassDto getClassByCode(String code, Account account);
     List<ClassInfoResponse> getClassList(Account account);
 }

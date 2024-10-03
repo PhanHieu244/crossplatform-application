@@ -47,10 +47,6 @@ public class ClassModel {
     @Column(name = "attached_code", length = 6)
     private String attachedCode;
 
-    @Column(name = "course_code", nullable = false, length = 10)
-    private String courseCode;
-
-    @ColumnDefault("'LT'")
     @Enumerated(EnumType.STRING)
     @Column(name = "class_type", nullable = false)
     private ClassType classType;

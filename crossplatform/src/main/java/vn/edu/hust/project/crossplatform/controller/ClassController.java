@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.hust.project.crossplatform.dto.ClassDto;
 import vn.edu.hust.project.crossplatform.dto.request.BaseClassRequest;
 import vn.edu.hust.project.crossplatform.dto.request.BaseRequest;
 import vn.edu.hust.project.crossplatform.dto.request.CreateClassRequest;
@@ -26,9 +25,9 @@ public class ClassController {
     public ResponseEntity<Resource> createClass(
             @Valid @RequestBody CreateClassRequest request
     ){
-        var lecturerId = authService.getLecturerByToken(request.getToken()).getId();
+        authService.getAccountAndCheckRole(request.getToken(), Account.Role.LECTURER);
         return ResponseEntity.ok().body(
-                new Resource(classService.createClass(request, lecturerId))
+                new Resource(classService.createClass(request))
         );
     }
 
@@ -36,7 +35,6 @@ public class ClassController {
     public ResponseEntity<Resource> editClass(
             @RequestBody EditClassRequest request
     ){
-        var lecturerId = authService.getLecturerByToken(request.getToken()).getId();
         return ResponseEntity.ok().body(
                 new Resource(classService.editClass(request))
         );
@@ -46,8 +44,8 @@ public class ClassController {
     public ResponseEntity<Resource> deleteClass(
             @RequestBody BaseClassRequest request
             ){
-        authService.getAccountAndCheckRole(request.getToken(), Account.Role.LECTURER);
-        classService.deleteClass(request.getClassId());
+        var account = authService.getAccountByToken(request.getToken());
+        classService.deleteClass(request.getClassId(), account);
         return ResponseEntity.ok().body(
                 new Resource(null)
         );
@@ -59,7 +57,7 @@ public class ClassController {
     ){
         var account = authService.getAccountByToken(request.getToken());
         return ResponseEntity.ok().body(
-                new Resource(classService.getClassById(request.getClassId(), account))
+                new Resource(classService.getClassByCode(request.getClassId(), account))
         );
     }
 

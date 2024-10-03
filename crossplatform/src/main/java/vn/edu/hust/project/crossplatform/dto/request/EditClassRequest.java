@@ -21,8 +21,8 @@ import java.time.LocalDate;
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class EditClassRequest extends TokenRequest {
-    @NotNull(message = "class code cant be null")
-    private String code;
+    @NotNull(message = "class id cant be null")
+    private String classId;
     private String className;
     private ClassType classType;
     private LocalDate startDate;

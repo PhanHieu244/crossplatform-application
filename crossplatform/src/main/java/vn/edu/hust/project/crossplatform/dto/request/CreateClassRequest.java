@@ -20,9 +20,10 @@ import java.time.LocalDate;
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CreateClassRequest extends TokenRequest {
+    @NotNull
     private Integer lecturerId;
-    @NotNull(message = "class code cant be null")
-    private String code;
+    @NotNull(message = "class id cant be null")
+    private String classId;
     private String attachedCode;
 
     @NotNull(message = "class name cant be null")

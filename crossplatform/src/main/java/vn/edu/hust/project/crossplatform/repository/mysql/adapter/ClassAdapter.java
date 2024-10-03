@@ -16,6 +16,7 @@ import vn.edu.hust.project.crossplatform.repository.mysql.IClassDetailRepository
 import vn.edu.hust.project.crossplatform.repository.mysql.IClassRepository;
 import vn.edu.hust.project.crossplatform.repository.mysql.mapper.ClassModelMapper;
 import vn.edu.hust.project.crossplatform.repository.mysql.model.ClassDetailModel;
+import vn.edu.hust.project.crossplatform.repository.mysql.model.ClassModel;
 
 import java.util.List;
 
@@ -28,45 +29,39 @@ public class ClassAdapter implements IClassPort {
 
     @Override
     public ClassDto createClass(ClassDto classDto) {
-        try{
-            if(classDto.getStartDate().isAfter(classDto.getEndDate())){
-                throw new ApplicationException(
-                        ResponseCode.PARAMETER_VALUE_IS_INVALID,
-                        "Start date cannot be after end date"
-                );
-            }
-            classDto.setStatus(ClassStatus.ACTIVE);
-            return ClassModelMapper.INSTANCE.toEntity(
-                    classRepository.save(ClassModelMapper.INSTANCE.toModel(classDto))
+
+        if(classDto.getStartDate().isAfter(classDto.getEndDate())){
+            throw new ApplicationException(
+                    ResponseCode.PARAMETER_VALUE_IS_INVALID,
+                    "Start date cannot be after end date"
             );
         }
-        catch(Exception e){
-            log.error("Error creating class", e);
-            throw new ApplicationException("create class error");
-        }
+        classDto.setStatus(ClassStatus.ACTIVE);
+        return ClassModelMapper.INSTANCE.toEntity(
+                classRepository.save(ClassModelMapper.INSTANCE.toModel(classDto))
+        );
     }
 
     @Override
     public ClassDto findClassById(Integer classId) {
         var classModel = classRepository.findById(classId).orElseThrow(
-                () -> new NoDataException("Class not found")
+                () -> {
+                    log.error("Class not found with id {}", classId);
+                    return new NoDataException("Class not found");
+                }
         );
         return ClassModelMapper.INSTANCE.toEntity(classModel);
     }
 
     @Override
     public ClassDto findClassByCode(String classCode) {
-        var classModel = classRepository.findClassByCode(classCode).orElseThrow(
-                () -> new NoDataException("Class not found")
-        );
+        var classModel = getClassModelByCode(classCode);
         return ClassModelMapper.INSTANCE.toEntity(classModel);
     }
 
     @Override
     public ClassDto editClass(EditClassRequest request) {
-        var existingClass = classRepository.findClassByCode(request.getCode()).orElseThrow(
-                () -> new NoDataException("class is not exist")
-        );
+        var existingClass = getClassModelByCode(request.getClassId());
         if(request.getClassName() != null){
             existingClass.setClassName(request.getClassName());
         }
@@ -77,7 +72,7 @@ public class ClassAdapter implements IClassPort {
             existingClass.setEndDate(request.getEndDate());
         }
         if (request.getStatus() != null){
-            existingClass.setStatus(request.getStatus().getValue());
+            existingClass.setStatus(request.getStatus().name());
         }
         return ClassModelMapper.INSTANCE.toEntity(
                 classRepository.save(existingClass)
@@ -104,21 +99,17 @@ public class ClassAdapter implements IClassPort {
     }
 
     @Override
-    public void deleteClass(Integer classId) {
-        var existingClass = classRepository.findById(classId).orElseThrow(
-                () -> new NoDataException("class is not exist")
-        );
+    public void deleteClass(String code) {
+        var existingClass = getClassModelByCode(code);
         classRepository.delete(existingClass);
     }
 
-    @Override
-    public void deleteClass(Integer classId, Integer lecturerId) {
-        var existingClass = classRepository.findById(classId).orElseThrow(
-                () -> new NoDataException("class is not exist")
+    private ClassModel getClassModelByCode(String code) {
+        return classRepository.findClassByCode(code).orElseThrow(
+                () -> {
+                    log.error("Class not found with code {}", code);
+                    return new NoDataException("class is not exist");
+                }
         );
-        if(!existingClass.getLecturerId().equals(lecturerId)){
-            throw new UnauthorizedException("cannot delete class with different lecturer");
-        }
-        classRepository.delete(existingClass);
     }
 }

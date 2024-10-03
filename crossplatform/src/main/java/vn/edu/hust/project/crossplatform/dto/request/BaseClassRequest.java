@@ -13,5 +13,5 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class BaseClassRequest extends BaseRequest {
-    private Integer classId;
+    private String classId; //is code
 }

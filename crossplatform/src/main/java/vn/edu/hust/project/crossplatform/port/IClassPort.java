@@ -14,6 +14,5 @@ public interface IClassPort {
     ClassDto editClass(EditClassRequest request);
     List<ClassDto> getStudentClasses(Integer studentId);
     List<ClassDto> getLecturerClasses(Integer lecturerId);
-    void deleteClass(Integer classId);
-    void deleteClass(Integer classId, Integer lecturerId);
+    void deleteClass(String code);
 }

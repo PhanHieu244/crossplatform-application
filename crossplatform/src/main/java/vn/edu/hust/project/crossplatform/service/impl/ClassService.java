@@ -5,12 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import vn.edu.hust.project.crossplatform.constant.ClassStatus;
+import vn.edu.hust.project.crossplatform.constant.ResponseCode;
 import vn.edu.hust.project.crossplatform.dto.ClassDto;
 import vn.edu.hust.project.crossplatform.dto.mapper.ClassDtoMapper;
 import vn.edu.hust.project.crossplatform.dto.request.CreateClassRequest;
 import vn.edu.hust.project.crossplatform.dto.request.EditClassRequest;
 import vn.edu.hust.project.crossplatform.dto.response.ClassInfoResponse;
 import vn.edu.hust.project.crossplatform.exception.UnauthorizedException;
+import vn.edu.hust.project.crossplatform.exception.base.ApplicationException;
 import vn.edu.hust.project.crossplatform.port.IClassDetailPort;
 import vn.edu.hust.project.crossplatform.port.IClassPort;
 import vn.edu.hust.project.crossplatform.port.ILecturerPort;
@@ -32,34 +34,40 @@ public class ClassService implements IClassService {
     private final IClassDetailPort classDetailPort;
 
     @Override
-    public ClassDto createClass(CreateClassRequest request, Integer lecturerId) {
-        request.setLecturerId(lecturerId);
+    public ClassDto createClass(CreateClassRequest request) {
+        var lecturer = lecturerPort.getLecturer(request.getLecturerId());
+        if(lecturer == null) {
+            throw new ApplicationException(ResponseCode.PARAMETER_VALUE_IS_INVALID, "not exist this lecturer id");
+        }
         return classPort.createClass(ClassDtoMapper.INSTANCE.toClassDto(request));
     }
 
     @Override
     public ClassDto editClass(EditClassRequest request) {
+        var account = authService.getAccountByToken(request.getToken());
+        checkEditClass(account, request.getClassId());
         return classPort.editClass(request);
     }
 
     @Override
-    public void deleteClass(Integer classId) {
-        classPort.deleteClass(classId);
+    public void deleteClass(String code) {
+        classPort.deleteClass(code);
     }
 
     @Override
-    public void deleteClass(Integer classId, Integer lectureId) {
-        classPort.deleteClass(classId, lectureId);
+    public void deleteClass(String code, Account account) {
+        checkEditClass(account, code);
+        classPort.deleteClass(code);
     }
 
     @Override
-    public ClassDto getClassById(Integer classId) {
-        return classPort.findClassById(classId);
+    public ClassDto getClassByCode(String code) {
+        return classPort.findClassByCode(code);
     }
 
     @Override
-    public ClassDto getClassById(Integer classId, Account account) {
-        ClassDto classDto = classPort.findClassById(classId);
+    public ClassDto getClassByCode(String code, Account account) {
+        ClassDto classDto = classPort.findClassByCode(code);
         checkAccessClassInfo(classDto, account);
         return classDto;
     }
@@ -76,7 +84,8 @@ public class ClassService implements IClassService {
             classList = classPort.getStudentClasses(lecturerId);
         }
         else{
-            throw new UnauthorizedException();
+            log.error("your role cant access class list");
+            throw new UnauthorizedException("your role cant access class list");
         }
         if(CollectionUtils.isEmpty(classList)) return List.of();
 
@@ -87,9 +96,9 @@ public class ClassService implements IClassService {
 
     public ClassInfoResponse toClassResponse(ClassDto classDto) {
         var classInfoResponse = new ClassInfoResponse();
-        classInfoResponse.setClassId(classDto.getCode());
+        classInfoResponse.setClassId(classDto.getClassId());
         classInfoResponse.setClassName(classDto.getClassName());;
-        classInfoResponse.setLecturerName(lecturerPort.getLecturerName(classDto.getLectureId()));
+        classInfoResponse.setLecturerName(lecturerPort.getLecturerName(classDto.getLecturerId()));
         classInfoResponse.setStudentCount(classDetailPort.getStudentCount(classDto.getId()));
         classInfoResponse.setStatus(classDto.getStatus());
         classInfoResponse.setEndDate(classDto.getEndDate());
@@ -97,20 +106,19 @@ public class ClassService implements IClassService {
         return classInfoResponse;
     }
 
-
+    private void checkEditClass(Account account, String classCode){
+        var classDto = classPort.findClassByCode(classCode);
+        if(!checkLecturerAccess(account, classDto)){
+            log.error("your role can't edit this class");
+            throw new UnauthorizedException("your role can't edit this class");
+        }
+    }
 
     private void checkAccessClassInfo(ClassDto classDto, Account account) {
-        if(account.getRole().equals(Account.Role.LECTURER.toString())){
-            var lecturerId = authService.getLecturerByAccount(account).getId();
-            if(!lecturerCanAccessClassInfo(classDto, lecturerId)){
-
-                log.warn("lecturer can not access other lecturer's class");
-                throw new UnauthorizedException("lecturer can not access other lecturer's class");
-            }
+        if(checkLecturerAccess(account, classDto)){
             return;
         }
-
-        if(account.getRole().equals(Account.Role.STUDENT.toString())) {
+        else if(account.getRole().equals(Account.Role.STUDENT.toString())) {
             var studentId = authService.getStudentByAccount(account).getId();
             if(!studentCanAccessClassInfo(classDto, studentId)){
                 log.warn("student can not access class");
@@ -119,11 +127,26 @@ public class ClassService implements IClassService {
             return;
         }
 
-        throw new UnauthorizedException();
+        log.error("your role can't access this class");
+        throw new UnauthorizedException("your role can't access this class");
+    }
+
+    private boolean checkLecturerAccess(Account account, ClassDto classDto) {
+        if(account.getRole().equals(Account.Role.LECTURER.toString())){
+            var lecturerId = authService.getLecturerByAccount(account).getId();
+            if(!lecturerCanAccessClassInfo(classDto, lecturerId)){
+                log.warn("lecturer can not access other lecturer's class");
+                throw new UnauthorizedException("lecturer can not access other lecturer's class");
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     private Boolean lecturerCanAccessClassInfo(ClassDto classDto, Integer lectureId){
-        return classDto.getLectureId().equals(lectureId);
+        return classDto.getLecturerId().equals(lectureId);
     }
     private Boolean studentCanAccessClassInfo(ClassDto classDto, Integer studentId){
         return false;

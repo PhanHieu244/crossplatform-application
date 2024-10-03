@@ -1,5 +1,6 @@
 package vn.edu.hust.project.crossplatform.repository.mysql.adapter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.hust.project.crossplatform.exception.TokenInvalidException;
@@ -9,6 +10,7 @@ import vn.edu.hust.project.crossplatform.repository.mysql.AccountRepository_2;
 import vn.edu.hust.project.crossplatform.repository.mysql.model.Account;
 
 @Service
+@Slf4j
 public class AuthAdapter implements IAuthPort {
     @Autowired
     private AccountRepository_2 accountRepository;
@@ -22,7 +24,10 @@ public class AuthAdapter implements IAuthPort {
 
     @Override
     public void checkRole(Account account, Account.Role role) {
-        if(!account.getRole().equals(role.toString())) throw new UnauthorizedException();
+        if(!account.getRole().equals(role.toString())) {
+            log.error("cant pass check role");
+            throw new UnauthorizedException("your role is not allowed");
+        }
     }
 
     @Override
