@@ -26,9 +26,4 @@ public class Student {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "class_id")
-    private Course classField;
-
 }

@@ -14,3 +14,5 @@ ALTER TABLE attendance MODIFY attendance_status VARCHAR(25) NOT NULL;
 ALTER TABLE leave_requests MODIFY status VARCHAR(25) NOT NULL;
 ALTER TABLE materials MODIFY material_type VARCHAR(25) NOT NULL;
 ALTER TABLE notifications MODIFY status VARCHAR(25) NOT NULL;
+
+ALTER TABLE attendance DROP session_id;

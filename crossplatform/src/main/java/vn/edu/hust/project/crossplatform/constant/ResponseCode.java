@@ -27,6 +27,7 @@ public enum ResponseCode {
     ACTION_HAS_BEEN_DONE_PREVIOUSLY_BY_THIS_USER(1010L, "action has been done previously"),
     INVALID_EMAIL_FORMAT(1011L, "invalid email format"),
     INVALID_PASSWORD_LENGTH(1012L, "Password length must be between 6 and 10 characters"),
+    ADD_STUDENT_ERROR(1013L, "add student error"),
     ;
     private final long code;
     private final String message;
