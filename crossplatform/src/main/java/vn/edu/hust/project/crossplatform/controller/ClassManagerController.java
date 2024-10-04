@@ -14,10 +14,10 @@ import vn.edu.hust.project.crossplatform.service.IClassDetailService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/it5023e")
-public class RegisterController {
+public class ClassManagerController {
     private final IClassDetailService classDetailService;
 
-    @PostMapping("/addStudent")
+    @PostMapping("/add_student")
     public ResponseEntity<Resource> addStudent(
             @Valid @RequestBody AddStudentRequest request
     ) {

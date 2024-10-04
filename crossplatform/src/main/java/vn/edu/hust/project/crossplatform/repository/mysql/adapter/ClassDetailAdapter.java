@@ -37,4 +37,10 @@ public class ClassDetailAdapter implements IClassDetailPort {
         }
     }
 
+    @Override
+    public boolean isStudentBelongToClass(Integer classId, Integer studentId) {
+        var classDetail = classDetailRepository.findByStudentIdAndClassId(studentId, classId);
+        return classDetail.isPresent();
+    }
+
 }
