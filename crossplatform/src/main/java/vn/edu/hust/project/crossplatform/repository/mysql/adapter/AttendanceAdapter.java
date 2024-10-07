@@ -21,8 +21,8 @@ import vn.edu.hust.project.crossplatform.repository.mysql.IClassRepository;
 import vn.edu.hust.project.crossplatform.repository.mysql.mapper.ClassModelMapper;
 import vn.edu.hust.project.crossplatform.repository.mysql.model.Attendance;
 import vn.edu.hust.project.crossplatform.repository.mysql.model.ClassDetailModel;
+import vn.edu.hust.project.crossplatform.utils.ClassDtoUtils;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +46,7 @@ public class AttendanceAdapter implements IAttendancePort {
     }
 
     public void takeAttendance(TakeAttendanceRequest request, ClassDto classDto) {
-        if(!IsAttendanceDateValid(request.getDate(), classDto)){
+        if(!ClassDtoUtils.IsDateValid(request.getDate(), classDto)){
             log.error("attendance date is invalid");
             throw new ApplicationException(ResponseCode.PARAMETER_VALUE_IS_INVALID, "attendance date is invalid");
         }
@@ -143,7 +143,5 @@ public class AttendanceAdapter implements IAttendancePort {
                 });
     }
 
-    private static boolean IsAttendanceDateValid(LocalDate date, ClassDto classModel) {
-        return date.isAfter(classModel.getStartDate()) && date.isBefore(classModel.getEndDate());
-    }
+
 }
