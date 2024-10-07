@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class BaseDto {
-    private int id;
+public class ClassDetailDto extends BaseDto{
+    private Integer classId;
+    private Integer studentId;
 }
