@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import vn.edu.hust.project.crossplatform.constant.ResponseCode;
 import vn.edu.hust.project.crossplatform.dto.ClassDto;
-import vn.edu.hust.project.crossplatform.dto.mapper.ClassDtoMapper;
+import vn.edu.hust.project.crossplatform.mapper.ClassMapper;
 import vn.edu.hust.project.crossplatform.dto.request.CreateClassRequest;
 import vn.edu.hust.project.crossplatform.dto.request.EditClassRequest;
 import vn.edu.hust.project.crossplatform.dto.response.ClassInfoResponse;
@@ -38,7 +38,7 @@ public class ClassService implements IClassService {
         if(lecturer == null) {
             throw new ApplicationException(ResponseCode.PARAMETER_VALUE_IS_INVALID, "not exist this lecturer id");
         }
-        return classPort.createClass(ClassDtoMapper.INSTANCE.toClassDto(request));
+        return classPort.createClass(ClassMapper.INSTANCE.toClassDto(request));
     }
 
     @Override

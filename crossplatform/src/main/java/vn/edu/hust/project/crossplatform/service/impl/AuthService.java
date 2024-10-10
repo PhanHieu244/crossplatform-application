@@ -2,12 +2,12 @@ package vn.edu.hust.project.crossplatform.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import vn.edu.hust.project.crossplatform.dto.StudentDto;
 import vn.edu.hust.project.crossplatform.port.IAuthPort;
 import vn.edu.hust.project.crossplatform.port.ILecturerPort;
 import vn.edu.hust.project.crossplatform.port.IStudentPort;
 import vn.edu.hust.project.crossplatform.repository.mysql.model.Account;
 import vn.edu.hust.project.crossplatform.repository.mysql.model.Lecturer;
-import vn.edu.hust.project.crossplatform.repository.mysql.model.Student;
 import vn.edu.hust.project.crossplatform.service.IAuthService;
 
 @Service
@@ -62,12 +62,12 @@ public class AuthService implements IAuthService {
         return lecturerPort.getLecturer(account);
     }
 
-    public Student getStudentByToken(String token) {
+    public StudentDto getStudentByToken(String token) {
         var account = getAccountByToken(token);
         return getStudentByAccount(account);
     }
 
-    public Student getStudentByAccount(Account account) {
+    public StudentDto getStudentByAccount(Account account) {
         checkRole(account, Account.Role.STUDENT);
         return studentPort.getStudent(account);
     }

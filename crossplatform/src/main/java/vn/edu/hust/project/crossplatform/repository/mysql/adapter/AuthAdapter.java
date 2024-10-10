@@ -24,6 +24,10 @@ public class AuthAdapter implements IAuthPort {
 
     @Override
     public void checkRole(Account account, Account.Role role) {
+        checkAccountRole(account, role);
+    }
+
+    public static void checkAccountRole(Account account, Account.Role role) {
         if(!account.getRole().equals(role.toString())) {
             log.error("cant pass check role");
             throw new UnauthorizedException("your role is not allowed");

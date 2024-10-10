@@ -7,18 +7,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import vn.edu.hust.project.crossplatform.constant.AttendanceStatus;
 
-import java.time.LocalDate;
+import java.io.File;
+import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AttendanceDto extends BaseDto{
-    private AttendanceStatus attendanceStatus;
-    private LocalDate attendanceTime;
-    private Integer classDetailId;
+public class AssignmentSubmissionDto extends BaseDto {
+    private Integer assignmentId;
+    private Integer studentId;
+    private LocalDateTime submissionTime;
+    private Float grade;
+    private File file;
+    private String textResponse;
 }

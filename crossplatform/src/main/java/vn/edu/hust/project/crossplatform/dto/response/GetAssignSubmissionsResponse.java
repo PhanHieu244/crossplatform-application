@@ -1,4 +1,4 @@
-package vn.edu.hust.project.crossplatform.dto;
+package vn.edu.hust.project.crossplatform.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -7,18 +7,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import vn.edu.hust.project.crossplatform.constant.AttendanceStatus;
+import vn.edu.hust.project.crossplatform.dto.StudentDto;
 
-import java.time.LocalDate;
+import java.io.File;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AttendanceDto extends BaseDto{
-    private AttendanceStatus attendanceStatus;
-    private LocalDate attendanceTime;
-    private Integer classDetailId;
+public class GetAssignSubmissionsResponse {
+    private int submissionId;
+    private StudentDto student;
+    private File file;
+    private String textResponse;
+    private Float grade;
 }

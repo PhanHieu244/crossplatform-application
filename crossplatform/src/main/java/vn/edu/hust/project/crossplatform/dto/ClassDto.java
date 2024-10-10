@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import vn.edu.hust.project.crossplatform.constant.ClassStatus;
 import vn.edu.hust.project.crossplatform.constant.ClassType;
 
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ClassDto extends BaseDto {
     private String classId;
