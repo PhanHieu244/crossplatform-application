@@ -9,6 +9,7 @@ import vn.edu.hust.project.crossplatform.port.IClassDetailPort;
 import vn.edu.hust.project.crossplatform.port.IClassPort;
 import vn.edu.hust.project.crossplatform.port.ILecturerPort;
 import vn.edu.hust.project.crossplatform.repository.mysql.model.Account;
+import vn.edu.hust.project.crossplatform.repository.mysql.model.Lecturer;
 import vn.edu.hust.project.crossplatform.service.IAuthService;
 import vn.edu.hust.project.crossplatform.service.IValidateClassAccessService;
 
@@ -24,7 +25,7 @@ public class ValidateClassAccessService implements IValidateClassAccessService {
     @Override
     public boolean canEditClass(Account account, String classCode) {
         var classDto = classPort.findClassByCode(classCode);
-        return checkLecturerAccess(account, classDto);
+        return canAccessByLecturerRole(account, classDto);
     }
 
     @Override
@@ -33,18 +34,11 @@ public class ValidateClassAccessService implements IValidateClassAccessService {
         return classPort.findClassByCode(classCode);
     }
 
-    private boolean checkLecturerAccess(Account account, ClassDto classDto) {
-        if(account.getRole().equals(Account.Role.LECTURER.toString())){
-            var lecturerId = authService.getLecturerByAccount(account).getId();
-            if(!lecturerCanAccessClassInfo(classDto, lecturerId)){
-                log.warn("lecturer can not access other lecturer's class");
-                throw new UnauthorizedException("lecturer can not access other lecturer's class");
-            }
-            return true;
-        }
-        else {
-            return false;
-        }
+    @Override
+    public ClassDto getAndCheckEditClass(Lecturer lecturer, String classCode) {
+        var classDto = classPort.findClassByCode(classCode);
+        checkLecturerAccessClassInfo(classDto, lecturer.getId());
+        return classDto;
     }
 
     public void checkEditClass(Account account, String classCode){
@@ -55,7 +49,9 @@ public class ValidateClassAccessService implements IValidateClassAccessService {
     }
 
     public void checkAccessClassInfo(ClassDto classDto, Account account) {
-        if(checkLecturerAccess(account, classDto)){
+        if(account.getRole().equals(Account.Role.LECTURER.toString())){
+            var lecturerId = authService.getLecturerByAccount(account).getId();
+            checkLecturerAccessClassInfo(classDto, lecturerId);
             return;
         }
         else if(account.getRole().equals(Account.Role.STUDENT.toString())) {
@@ -72,7 +68,19 @@ public class ValidateClassAccessService implements IValidateClassAccessService {
     }
 
     @Override
-    public ClassDto checkAccessClassInfo(String classCode, String token) {
+    public boolean isStudentBelongToClass(Integer studentId, Integer classId) {
+        return classDetailPort.isStudentBelongToClass(classId, studentId);
+    }
+
+    @Override
+    public void checkAccessClassInfo(String classCode, String token) {
+        var classDto = classPort.findClassByCode(classCode);
+        var account = authService.getAccountByToken(token);
+        checkAccessClassInfo(classDto, account);
+    }
+
+    @Override
+    public ClassDto getAndCheckAccessClassInfo(String classCode, String token) {
         var classDto = classPort.findClassByCode(classCode);
         var account = authService.getAccountByToken(token);
         checkAccessClassInfo(classDto, account);
@@ -80,8 +88,11 @@ public class ValidateClassAccessService implements IValidateClassAccessService {
     }
 
     @Override
-    public boolean isStudentBelongToClass(Integer studentId, Integer classId) {
-        return classDetailPort.isStudentBelongToClass(classId, studentId);
+    public void checkLecturerAccessClassInfo(ClassDto classDto, Integer lecturerId){
+        if(!isClassBelongToLecturer(classDto, lecturerId)){
+            log.warn("lecturer not allow access property from class id: {} name: {}", lecturerId, classDto.getClassName());
+            throw new UnauthorizedException("lecturer not allow access this class");
+        }
     }
 
     @Override
@@ -94,10 +105,21 @@ public class ValidateClassAccessService implements IValidateClassAccessService {
         return classDto;
     }
 
-    private Boolean lecturerCanAccessClassInfo(ClassDto classDto, Integer lectureId){
-        return classDto.getLecturerId().equals(lectureId);
+    private boolean canAccessByLecturerRole(Account account, ClassDto classDto) {
+        if(account.getRole().equals(Account.Role.LECTURER.toString())){
+            var lecturerId = authService.getLecturerByAccount(account).getId();
+            return isClassBelongToLecturer(classDto, lecturerId);
+        }
+        else {
+            return false;
+        }
     }
+
     private Boolean studentCanAccessClassInfo(ClassDto classDto, Integer studentId){
         return isStudentBelongToClass(classDto.getId(), studentId);
+    }
+
+    private Boolean isClassBelongToLecturer(ClassDto classDto, Integer lecturerId){
+        return classDto.getLecturerId().equals(lecturerId);
     }
 }

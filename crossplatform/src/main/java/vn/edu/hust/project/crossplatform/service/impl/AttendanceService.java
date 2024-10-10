@@ -11,8 +11,8 @@ import vn.edu.hust.project.crossplatform.dto.request.TakeAttendanceRequest;
 import vn.edu.hust.project.crossplatform.dto.response.AttendanceListResponse;
 import vn.edu.hust.project.crossplatform.dto.response.StudentAttendancesResponse;
 import vn.edu.hust.project.crossplatform.port.IAttendancePort;
-import vn.edu.hust.project.crossplatform.port.IStudentPort;
 import vn.edu.hust.project.crossplatform.service.IAttendanceService;
+import vn.edu.hust.project.crossplatform.service.IAuthService;
 import vn.edu.hust.project.crossplatform.service.IValidateClassAccessService;
 
 @Service
@@ -20,21 +20,19 @@ import vn.edu.hust.project.crossplatform.service.IValidateClassAccessService;
 @RequiredArgsConstructor
 public class AttendanceService implements IAttendanceService {
     private final IAttendancePort attendancePort;
-    private final AuthService authService;
-    private final IValidateClassAccessService classService;
-    private final ValidateClassAccessService validateClassAccessService;
-    private final IStudentPort studentPort;
+    private final IAuthService authService;
+    private final IValidateClassAccessService validateClassAccessService;
 
     public void takeAttendance(TakeAttendanceRequest request){
         var account = authService.getAccountByToken(request.getToken());
-        var classDto = classService.getAndCheckEditClass(account, request.getClassId());
+        var classDto = validateClassAccessService.getAndCheckEditClass(account, request.getClassId());
         attendancePort.takeAttendance(request, classDto);
     }
 
     @Override
     public AttendanceListResponse getAttendanceList(GetAttendanceListRequest request) {
         var account = authService.getAccountByToken(request.getToken());
-        var classDto = classService.getAndCheckEditClass(account, request.getClassId());
+        var classDto = validateClassAccessService.getAndCheckEditClass(account, request.getClassId());
         return attendancePort.getAttendanceList(request, classDto.getId());
     }
 

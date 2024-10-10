@@ -24,7 +24,12 @@ public class ClassDetailService implements IClassDetailService {
         var classCode = addStudentRequest.getClassId();
         var classEntity = classPort.findClassByCode(classCode);
         var student = studentPort.findStudentById(addStudentRequest.getStudentId());
+        if(classDetailPort.isStudentBelongToClass(student.getId(), classEntity.getId())){
+            log.error("student already added in this class");
+            throw new ApplicationException("student already added in this class");
+        }
         if(classEntity.getMaxStudentAmount() <= classDetailPort.getStudentCount(classEntity.getId())) {
+            log.error("Class is max student amount exceeded");
             throw new ApplicationException(ResponseCode.ADD_STUDENT_ERROR ,"Class is max student amount exceeded");
         }
         classDetailPort.addStudent(classEntity.getId(), addStudentRequest.getStudentId());

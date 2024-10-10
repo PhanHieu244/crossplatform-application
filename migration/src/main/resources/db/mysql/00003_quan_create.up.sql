@@ -54,7 +54,7 @@ CREATE TABLE assignments (
 );
 
 -- Bảng điểm danh
-CREATE TABLE attendance (
+CREATE TABLE attendanceModel (
                             id INT AUTO_INCREMENT PRIMARY KEY,
                             session_id INT NOT NULL,
                             class_id INT,

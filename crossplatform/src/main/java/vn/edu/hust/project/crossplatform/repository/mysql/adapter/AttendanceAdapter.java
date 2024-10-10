@@ -13,13 +13,13 @@ import vn.edu.hust.project.crossplatform.dto.response.AttendanceListResponse;
 import vn.edu.hust.project.crossplatform.dto.response.AttendanceStudentDetail;
 import vn.edu.hust.project.crossplatform.dto.response.StudentAttendancesResponse;
 import vn.edu.hust.project.crossplatform.exception.base.ApplicationException;
-import vn.edu.hust.project.crossplatform.mapper.AttendanceMapper;
+import vn.edu.hust.project.crossplatform.repository.mysql.mapper.AttendanceMapper;
 import vn.edu.hust.project.crossplatform.port.IAttendancePort;
 import vn.edu.hust.project.crossplatform.repository.mysql.IAttendanceRepository;
 import vn.edu.hust.project.crossplatform.repository.mysql.IClassDetailRepository;
 import vn.edu.hust.project.crossplatform.repository.mysql.IClassRepository;
 import vn.edu.hust.project.crossplatform.repository.mysql.mapper.ClassModelMapper;
-import vn.edu.hust.project.crossplatform.repository.mysql.model.Attendance;
+import vn.edu.hust.project.crossplatform.repository.mysql.model.AttendanceModel;
 import vn.edu.hust.project.crossplatform.repository.mysql.model.ClassDetailModel;
 import vn.edu.hust.project.crossplatform.utils.ClassDtoUtils;
 
@@ -61,17 +61,17 @@ public class AttendanceAdapter implements IAttendancePort {
                         (existing, replacement) -> existing,
                         HashMap::new
                 ));
-        List<Attendance> attendances = new ArrayList<>();
+        List<AttendanceModel> attendanceModels = new ArrayList<>();
         for(var classDetail : classDetailList) {
-            var attendance = new Attendance();
+            var attendance = new AttendanceModel();
             var status = absentHashmap.containsKey(classDetail.getStudentId()) ?
                     AttendanceStatus.UNEXCUSED_ABSENCE : AttendanceStatus.PRESENT;
             attendance.setClassDetailId(classDetail.getId());
             attendance.setAttendanceStatus(status);
             attendance.setAttendanceTime(request.getDate());
-            attendances.add(attendance);
+            attendanceModels.add(attendance);
         }
-        attendanceRepository.saveAll(attendances);
+        attendanceRepository.saveAll(attendanceModels);
     }
 
     public AttendanceListResponse getAttendanceList(GetAttendanceListRequest request, Integer classId) {
@@ -89,11 +89,11 @@ public class AttendanceAdapter implements IAttendancePort {
                     .toList();
             var attendances = attendanceRepository.getAllAtAttendanceTimeAndClassDetailIds(request.getDate(), classDetailIds);
             var attendanceDetails = attendances.stream()
-                    .map(attendance ->
+                    .map(attendanceModel ->
                         AttendanceStudentDetail.builder()
-                                .attendanceId(attendance.getId())
-                                .studentId(classDetailHashMap.get(attendance.getClassDetailId()).getStudentId())
-                                .status(attendance.getAttendanceStatus())
+                                .attendanceId(attendanceModel.getId())
+                                .studentId(classDetailHashMap.get(attendanceModel.getClassDetailId()).getStudentId())
+                                .status(attendanceModel.getAttendanceStatus())
                                 .build()
                     ).toList();
             return AttendanceListResponse.builder()
@@ -116,8 +116,8 @@ public class AttendanceAdapter implements IAttendancePort {
                 });
         var attendanceList = attendanceRepository.getAttendancesByClassDetailId(classDetail.getId());
         var absentsDates = attendanceList.stream()
-                .filter(attendance -> attendance.getAttendanceStatus() != AttendanceStatus.PRESENT)
-                .map(Attendance::getAttendanceTime)
+                .filter(attendanceModel -> attendanceModel.getAttendanceStatus() != AttendanceStatus.PRESENT)
+                .map(AttendanceModel::getAttendanceTime)
                 .toList();
         return StudentAttendancesResponse.builder()
                 .absentDates(absentsDates)
@@ -135,7 +135,7 @@ public class AttendanceAdapter implements IAttendancePort {
         return AttendanceMapper.INSTANCE.modelToEntity(getAttendanceModel(attendanceId));
     }
 
-    public Attendance getAttendanceModel(Integer attendanceId) {
+    public AttendanceModel getAttendanceModel(Integer attendanceId) {
         return attendanceRepository.findById(attendanceId)
                 .orElseThrow(() -> {
                     log.error("attendance not found");

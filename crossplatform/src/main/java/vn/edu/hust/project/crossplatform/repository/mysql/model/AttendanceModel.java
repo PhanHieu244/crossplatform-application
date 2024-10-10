@@ -2,20 +2,17 @@ package vn.edu.hust.project.crossplatform.repository.mysql.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import vn.edu.hust.project.crossplatform.constant.AttendanceStatus;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "attendance")
-public class Attendance {
+public class AttendanceModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
