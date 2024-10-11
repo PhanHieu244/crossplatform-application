@@ -15,5 +15,14 @@
     <changeSet id="00005" author="phanhieu244">
         <sqlFile relativeToChangelogFile="true" path="../../db/mysql/00005_update_sql.up.sql"/>
     </changeSet>
+    <changeSet id="00006" author="phanhieu244">
+        <sqlFile relativeToChangelogFile="true" path="../mysql/00006_absence_request.up.sql"/>
+    </changeSet>
+    <changeSet id="00007" author="phanhieu244">
+        <sqlFile relativeToChangelogFile="true" path="../mysql/00007_assignments.up.sql"/>
+    </changeSet>
+    <changeSet id="00008" author="phanhieu244">
+        <sqlFile relativeToChangelogFile="true" path="../mysql/00008_notifications.up.sql"/>
+    </changeSet>
 </databaseChangeLog>
  
