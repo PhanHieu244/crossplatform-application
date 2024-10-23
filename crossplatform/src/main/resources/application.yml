@@ -1,6 +1,8 @@
 spring:
   application:
     name: crossplatform
+  websocket:
+    enabled: true
 
   datasource:
     username: root

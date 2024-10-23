@@ -33,7 +33,7 @@ public class ClassController {
 
     @PostMapping("/edit_class")
     public ResponseEntity<Resource> editClass(
-            @RequestBody EditClassRequest request
+           @Valid @RequestBody EditClassRequest request
     ){
         return ResponseEntity.ok().body(
                 new Resource(classService.editClass(request))
@@ -42,8 +42,8 @@ public class ClassController {
 
     @DeleteMapping("/delete_class")
     public ResponseEntity<Resource> deleteClass(
-            @RequestBody BaseClassRequest request
-            ){
+           @Valid @RequestBody BaseClassRequest request
+    ){
         var account = authService.getAccountByToken(request.getToken());
         classService.deleteClass(request.getClassId(), account);
         return ResponseEntity.ok().body(

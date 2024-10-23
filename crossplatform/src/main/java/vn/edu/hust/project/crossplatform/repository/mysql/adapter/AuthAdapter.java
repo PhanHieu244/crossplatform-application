@@ -3,6 +3,7 @@ package vn.edu.hust.project.crossplatform.repository.mysql.adapter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.edu.hust.project.crossplatform.exception.NoDataException;
 import vn.edu.hust.project.crossplatform.exception.TokenInvalidException;
 import vn.edu.hust.project.crossplatform.exception.UnauthorizedException;
 import vn.edu.hust.project.crossplatform.port.IAuthPort;
@@ -20,6 +21,16 @@ public class AuthAdapter implements IAuthPort {
         Account account = accountRepository.findByToken(token);
         if(account == null) throw new TokenInvalidException();
         return account;
+    }
+
+    @Override
+    public Account getAccountById(Integer id) {
+        return accountRepository.findById(id.longValue()).orElseThrow(
+                () -> {
+                    log.error("Account not found with id {}", id);
+                    return new NoDataException("Account not found");
+                }
+        );
     }
 
     @Override

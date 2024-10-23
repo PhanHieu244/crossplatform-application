@@ -15,5 +15,6 @@ public interface IAuthService {
     Lecturer getLecturerByAccount(Account account);
     StudentDto getStudentByToken(String token);
     StudentDto getStudentByAccount(Account account);
+    Account getAccountById(Integer id);
 }
 
