@@ -36,5 +36,14 @@ public class Account {
     @Column(name = "status", nullable = false)
     private String status = "Kích hoạt";  // Thiết lập giá trị mặc định trong Java
 
+    public enum Role {
+        LECTURER,
+        STUDENT
+    }
+
+    public enum Status {
+        KICH_HOAT,
+        BI_KHOA
+    }
 
 }

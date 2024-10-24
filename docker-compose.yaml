@@ -2,14 +2,42 @@ version: '3.8'
 services:
   db:
     image: mysql:8.0
+    cap_add:
+      - SYS_NICE
     restart: always
     environment:
-        - MYSQL_DATABASE=cross_platform_db
-        - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=cross_platform_db
+      - MYSQL_ROOT_PASSWORD=123456
     ports:
       - '3309:3306'
     volumes:
       - db:/var/lib/mysql
+      - ./crossplatform/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  app:
+    build: .
+    image: phanhieu244/crossplatform:latest
+    container_name: crossplatform_app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_HOST=db
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/cross_platform_db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=123456
+    depends_on:
+      - db
+
 volumes:
   db:
     driver: local
+
+#docker-compose build app
+#docker login
+#docker push phanhieu244/crossplatform:latest
+
+
+#cd crossplatform
+#sudo docker-compose pull app
+#sudo docker-compose down
+#sudo docker-compose up -d

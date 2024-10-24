@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import vn.edu.hust.project.crossplatform.repository.mysql.model.Account;
 
 @Getter
 @Setter
@@ -13,6 +14,6 @@ public class SignupRequest {
     private String email;
     private String password;
     private String uuid;
-    private String role; // lecturer hoặc student
+    private Account.Role role; // lecturer hoặc student
 }
 

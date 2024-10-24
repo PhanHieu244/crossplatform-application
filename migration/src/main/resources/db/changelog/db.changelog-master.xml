@@ -6,8 +6,26 @@
         http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="00002_create_database.up" author="phanhieu244">
-        <sqlFile relativeToChangelogFile="true" path="../../db/mysql/00002_create_database.up.sql"/>
+    <changeSet id="00003" author="quan">
+        <sqlFile relativeToChangelogFile="true" path="../../db/mysql/00003_quan_create.up.sql"/>
+    </changeSet>
+    <changeSet id="00004.2" author="phanhieu244">
+        <sqlFile relativeToChangelogFile="true" path="../../db/mysql/00004_update_class.up.sql"/>
+    </changeSet>
+    <changeSet id="00005" author="phanhieu244">
+        <sqlFile relativeToChangelogFile="true" path="../../db/mysql/00005_update_sql.up.sql"/>
+    </changeSet>
+    <changeSet id="00006" author="phanhieu244">
+        <sqlFile relativeToChangelogFile="true" path="../mysql/00006_absence_request.up.sql"/>
+    </changeSet>
+    <changeSet id="00007" author="phanhieu244">
+        <sqlFile relativeToChangelogFile="true" path="../mysql/00007_assignments.up.sql"/>
+    </changeSet>
+    <changeSet id="00008" author="phanhieu244">
+        <sqlFile relativeToChangelogFile="true" path="../mysql/00008_notifications.up.sql"/>
+    </changeSet>
+    <changeSet id="00009" author="phanhieu244">
+        <sqlFile relativeToChangelogFile="true" path="../mysql/00009_messages.up.sql"/>
     </changeSet>
 </databaseChangeLog>
  
