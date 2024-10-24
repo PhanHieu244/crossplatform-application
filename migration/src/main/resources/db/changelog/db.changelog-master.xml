@@ -24,5 +24,8 @@
     <changeSet id="00008" author="phanhieu244">
         <sqlFile relativeToChangelogFile="true" path="../mysql/00008_notifications.up.sql"/>
     </changeSet>
+    <changeSet id="00009" author="phanhieu244">
+        <sqlFile relativeToChangelogFile="true" path="../mysql/00009_messages.up.sql"/>
+    </changeSet>
 </databaseChangeLog>
  

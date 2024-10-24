@@ -5,7 +5,7 @@ ADD CONSTRAINT FOREIGN KEY (from_user) REFERENCES accounts(id),
 ADD CONSTRAINT FOREIGN KEY (to_user) REFERENCES accounts(id);
 
 ALTER TABLE notifications
-DROP CONSTRAINT notifications_ibfk_1
+DROP CONSTRAINT notifications_ibfk_1;
 
 ALTER TABLE notifications
 MODIFY fromUser INT NOT NULL,

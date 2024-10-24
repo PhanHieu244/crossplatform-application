@@ -72,4 +72,9 @@ public class AuthService implements IAuthService {
         return studentPort.getStudent(account);
     }
 
+    @Override
+    public Account getAccountById(Integer id) {
+        return authPort.getAccountById(id);
+    }
+
 }

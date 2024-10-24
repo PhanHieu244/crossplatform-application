@@ -1,16 +1,17 @@
-package vn.edu.hust.project.crossplatform.dto;
+package vn.edu.hust.project.crossplatform.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class BaseDto {
-    private Integer id;
+public class DeleteMessageEvent{
+    private Integer messageId;
+    private Integer conversationId;
+    private Integer user;
 }
