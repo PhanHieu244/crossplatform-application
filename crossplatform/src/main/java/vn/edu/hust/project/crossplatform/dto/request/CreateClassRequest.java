@@ -1,5 +1,6 @@
 package vn.edu.hust.project.crossplatform.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.Max;
@@ -20,7 +21,7 @@ import java.time.LocalDate;
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CreateClassRequest extends TokenRequest {
-    @NotNull
+    @JsonIgnore
     private Integer lecturerId;
     @NotNull(message = "class id cant be null")
     private String classId;

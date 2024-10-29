@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface IClassRepository extends IBaseRepository<ClassModel> {
     List<ClassModel> findAllByLecturerId(Integer lecturerId);
     Optional<ClassModel> findClassByCode(String code);
+    boolean existsByCode(String code);
 }

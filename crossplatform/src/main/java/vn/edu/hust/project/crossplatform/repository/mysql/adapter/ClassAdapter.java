@@ -36,6 +36,13 @@ public class ClassAdapter implements IClassPort {
                     "Start date cannot be after end date"
             );
         }
+
+        if(classRepository.existsByCode(classDto.getClassId())){
+            throw new ApplicationException(
+                    ResponseCode.PARAMETER_VALUE_IS_INVALID,
+                    "class code is exist"
+            );
+        }
         classDto.setStatus(ClassStatus.ACTIVE);
         return ClassModelMapper.INSTANCE.toEntity(
                 classRepository.save(ClassModelMapper.INSTANCE.toModel(classDto))

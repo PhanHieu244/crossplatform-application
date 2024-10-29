@@ -34,10 +34,8 @@ public class ClassService implements IClassService {
 
     @Override
     public ClassDto createClass(CreateClassRequest request) {
-        var lecturer = lecturerPort.getLecturer(request.getLecturerId());
-        if(lecturer == null) {
-            throw new ApplicationException(ResponseCode.PARAMETER_VALUE_IS_INVALID, "not exist this lecturer id");
-        }
+        var lecturer = authService.getLecturerByToken(request.getToken());
+        request.setLecturerId(lecturer.getId());
         return classPort.createClass(ClassMapper.INSTANCE.toClassDto(request));
     }
 

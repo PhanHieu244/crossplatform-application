@@ -22,7 +22,7 @@ import java.time.LocalDate;
 @SuperBuilder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ClassDto extends BaseDto {
-    private String classId;
+    private String classId; //class code
     private String className;
     private String schedule;
     private Integer lecturerId;
