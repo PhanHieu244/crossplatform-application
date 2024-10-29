@@ -35,7 +35,7 @@ public class AbsenceRequestController {
         ));
     }
 
-    @GetMapping("/get_absence_requests")
+    @PostMapping("/get_absence_requests")
     private ResponseEntity<Resource> reviewAbsenceRequest(
             @Valid @RequestBody GetAbsenceRequests request
     ){

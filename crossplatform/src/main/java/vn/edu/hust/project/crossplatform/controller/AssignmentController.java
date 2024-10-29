@@ -35,7 +35,7 @@ public class AssignmentController {
         );
     }
 
-    @GetMapping(value = "/get_all_surveys")
+    @PostMapping(value = "/get_all_surveys")
     private ResponseEntity<Resource> getAllAssignments(
             @Valid @RequestBody GetAssignmentInClassRequest request
     ){

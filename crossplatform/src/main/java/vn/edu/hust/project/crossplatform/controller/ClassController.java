@@ -40,7 +40,7 @@ public class ClassController {
         );
     }
 
-    @DeleteMapping("/delete_class")
+    @PostMapping("/delete_class")
     public ResponseEntity<Resource> deleteClass(
            @Valid @RequestBody BaseClassRequest request
     ){
@@ -51,7 +51,7 @@ public class ClassController {
         );
     }
 
-    @GetMapping("/get_class_info")
+    @PostMapping("/get_class_info")
     public ResponseEntity<Resource> getClassInfo(
             @Valid @RequestBody BaseClassRequest request
     ){
@@ -61,7 +61,7 @@ public class ClassController {
         );
     }
 
-    @GetMapping("/get_class_list")
+    @PostMapping("/get_class_list")
     public ResponseEntity<Resource> getClassList(
             @Valid @RequestBody BaseRequest request
     ){
