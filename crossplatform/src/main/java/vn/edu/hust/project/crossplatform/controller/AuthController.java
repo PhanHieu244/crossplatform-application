@@ -64,7 +64,7 @@ public class AuthController {
         // Xử lý logic tạo mã xác thực
         String verifyCode = verificationService.generateVerifyCode(signupRequest.getEmail());
         verificationCode.setToken(verifyCode); // Sinh mã token
-        return ResponseEntity.ok(new ApiResponse(1000, "OK - Verification token sent: " + verifyCode));
+        return ResponseEntity.ok(new ApiResponse(1000, "OK", verifyCode));
     }
 
     private boolean isValidEmail(String email) {

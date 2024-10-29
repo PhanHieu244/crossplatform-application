@@ -68,7 +68,7 @@ public class VerificationController {
         }
 
         // Kiểm tra nếu không truyền mã xác thực
-        if (verificationRequest.getToken() == null || verificationRequest.getToken().isEmpty()) {
+        if (verificationRequest.getVerifyCode() == null || verificationRequest.getVerifyCode().isEmpty()) {
             return new ResponseEntity<>("1002 | Verification code is missing", HttpStatus.BAD_REQUEST);
         }
 
@@ -83,7 +83,7 @@ public class VerificationController {
         }
 
         // Kiểm tra mã xác thực có hợp lệ và đúng với email được gửi
-        if (!verificationService.isValidVerificationCode(verificationRequest.getEmail(), verificationRequest.getToken())) {
+        if (!verificationService.isValidVerificationCode(verificationRequest.getEmail(), verificationRequest.getVerifyCode())) {
             return new ResponseEntity<>("1004 | Invalid verification code or email mismatch", HttpStatus.BAD_REQUEST);
         }
 

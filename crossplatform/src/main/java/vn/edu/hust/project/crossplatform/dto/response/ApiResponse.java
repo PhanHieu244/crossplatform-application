@@ -6,10 +6,11 @@ import lombok.AllArgsConstructor;
 
 @Getter
 @Setter
-
+@AllArgsConstructor
 public class ApiResponse {
     private int statusCode;
     private String message;
+    private String verifyCode;
 
     public ApiResponse(int statusCode, String message) {
         this.statusCode = statusCode;
