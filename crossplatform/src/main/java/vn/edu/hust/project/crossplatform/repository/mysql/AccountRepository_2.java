@@ -9,5 +9,5 @@ public interface AccountRepository_2 extends JpaRepository<Account, Long> {
 
     // Truy vấn tìm kiếm tài khoản qua token
     Account findByToken(String token);
-
+    Account findById(Integer id);
 }
