@@ -23,13 +23,13 @@ public class AccountService {
         return accountRepository.existsByEmail(email);
     }
 
-    public String registerNewAccount(SignupRequest signupRequest) {
+    public Account registerNewAccount(SignupRequest signupRequest) {
         // Tạo account mới
         Account newAccount = new Account();
         newAccount.setEmail(signupRequest.getEmail());
         newAccount.setPassword(signupRequest.getPassword());  // Mã hóa mật khẩu
         newAccount.setName(signupRequest.getEmail());  // Name có thể là email hoặc tên đầy đủ
-        newAccount.setRole(signupRequest.getRole().toString()); // Đặt role từ request
+        newAccount.setRole(signupRequest.getRole()); // Đặt role từ request
         newAccount.setStatus("Bị khóa"); // Trạng thái mặc định là 'Kích hoạt'
         newAccount.setToken(null); // Sinh mã token
 
@@ -38,7 +38,7 @@ public class AccountService {
 
 
         // Trả về mã xác thực
-        return savedAccount.getToken();
+        return savedAccount;
     }
 
 
@@ -47,4 +47,6 @@ public class AccountService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
     }
+
+
 }

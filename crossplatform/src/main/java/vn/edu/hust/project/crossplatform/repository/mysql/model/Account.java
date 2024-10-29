@@ -17,6 +17,10 @@ public class Account {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
+    @Column(name = "ho")
+    private String ho;
+    @Column(name = "ten")
+    private String ten;
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -45,5 +49,8 @@ public class Account {
         KICH_HOAT,
         BI_KHOA
     }
+
+    @Column(name = "avatar")
+    private String avatar;
 
 }

@@ -7,10 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.edu.hust.project.crossplatform.constant.ResponseCode;
 import vn.edu.hust.project.crossplatform.dto.request.LoginRequest;
 import vn.edu.hust.project.crossplatform.dto.response.LoginResponse;
-import vn.edu.hust.project.crossplatform.exception.base.ApplicationException;
 import vn.edu.hust.project.crossplatform.repository.mysql.model.Account;
 import vn.edu.hust.project.crossplatform.service.AccountService_1;
 
@@ -79,8 +77,11 @@ public class LoginController {
             // Tạo đối tượng phản hồi
             LoginResponse response = new LoginResponse(
                     account.getId(),
+                    account.getHo(),
+                    account.getTen(),
                     account.getName(),
                     account.getToken(),
+                    account.getAvatar(),
                     account.getStatus().toString(),
                     account.getRole().toString(),
                     classList
