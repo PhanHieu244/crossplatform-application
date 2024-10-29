@@ -26,10 +26,12 @@ public class AccountService {
     public Account registerNewAccount(SignupRequest signupRequest) {
         // Tạo account mới
         Account newAccount = new Account();
+        newAccount.setHo(signupRequest.getHo());
+        newAccount.setTen(signupRequest.getTen());
         newAccount.setEmail(signupRequest.getEmail());
         newAccount.setPassword(signupRequest.getPassword());  // Mã hóa mật khẩu
         newAccount.setName(signupRequest.getEmail());  // Name có thể là email hoặc tên đầy đủ
-        newAccount.setRole(signupRequest.getRole()); // Đặt role từ request
+        newAccount.setRole(signupRequest.getRole().toString()); // Đặt role từ request
         newAccount.setStatus("Bị khóa"); // Trạng thái mặc định là 'Kích hoạt'
         newAccount.setToken(null); // Sinh mã token
 
