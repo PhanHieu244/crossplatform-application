@@ -11,8 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 public class LoginResponse {
     private int id;
+    private String ho;
+    private String ten;
     private String username;
     private String token;
+    private String Avatar;
     private String active;
     private String role;
     private List<String> classList;

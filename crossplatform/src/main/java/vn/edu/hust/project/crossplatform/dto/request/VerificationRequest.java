@@ -11,5 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class VerificationRequest {
     private String email;
-    private String code;  // Chỉ dùng khi kiểm tra mã xác thực (check verification)
+    private String password;  // Chỉ dùng khi kiểm tra mã xác thực (check verification)
+    private String token;
 }

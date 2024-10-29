@@ -11,6 +11,8 @@ import vn.edu.hust.project.crossplatform.repository.mysql.model.Account;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignupRequest {
+    private String ho;
+    private String ten;
     private String email;
     private String password;
     private String uuid;
