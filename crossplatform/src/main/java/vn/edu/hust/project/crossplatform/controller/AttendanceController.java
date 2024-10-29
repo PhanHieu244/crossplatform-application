@@ -38,7 +38,7 @@ public class AttendanceController
         ));
     }
 
-    @GetMapping("/get_attendance_record")
+    @PostMapping("/get_attendance_record")
     private ResponseEntity<Resource> getAttendanceRecord(
             @Valid @RequestBody GetAttendanceRecordRequest request
     ){
@@ -48,7 +48,7 @@ public class AttendanceController
         ));
     }
 
-    @GetMapping("/get_attendance_list")
+    @PostMapping("/get_attendance_list")
     private ResponseEntity<Resource> getAttendanceRecord(
             @Valid @RequestBody GetAttendanceListRequest request
     ){

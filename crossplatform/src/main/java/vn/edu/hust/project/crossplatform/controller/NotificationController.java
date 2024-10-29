@@ -27,7 +27,7 @@ public class NotificationController {
         );
     }
 
-    @GetMapping(value = "/get_unread_notification_count")
+    @PostMapping(value = "/get_unread_notification_count")
     private ResponseEntity<Resource> getUnreadNotificationCount(
             @Valid @RequestBody TokenRequest token
     ){
