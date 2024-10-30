@@ -11,6 +11,8 @@ import vn.edu.hust.project.crossplatform.dto.request.LoginRequest;
 import vn.edu.hust.project.crossplatform.dto.response.LoginResponse;
 import vn.edu.hust.project.crossplatform.repository.mysql.model.Account;
 import vn.edu.hust.project.crossplatform.service.AccountService_1;
+import vn.edu.hust.project.crossplatform.service.IClassService;
+import vn.edu.hust.project.crossplatform.service.impl.ClassService;
 
 import java.util.List;
 
@@ -20,6 +22,9 @@ public class LoginController {
 
     @Autowired
     private AccountService_1 accountService;
+
+    @Autowired
+    private IClassService classService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -71,7 +76,7 @@ public class LoginController {
             Account.Role role = Account.Role.valueOf(account.getRole());  // Chuyển từ String sang Enum
             Long accountId = account.getId().longValue();  // Chuyển từ Integer sang Long
 
-            List<String> classList = accountService.getClassListByRole(role, accountId);
+            var classList = classService.getClassList(account);
 
 
             // Tạo đối tượng phản hồi

@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vn.edu.hust.project.crossplatform.constant.ResponseCode;
 import vn.edu.hust.project.crossplatform.dto.request.VerificationRequest;
+import vn.edu.hust.project.crossplatform.dto.response.Resource;
 import vn.edu.hust.project.crossplatform.dto.response.VerificationResponse;
 import vn.edu.hust.project.crossplatform.service.VerificationService;
 
@@ -28,14 +30,10 @@ public class VerificationController {
                 return new ResponseEntity<>("9995 | Email not registered", HttpStatus.BAD_REQUEST);
             }
 
-            if (!verificationService.checkPassword(verificationRequest.getEmail(),verificationRequest.getPassword())) {
-                return new ResponseEntity<>("9995 | Incorrect password", HttpStatus.BAD_REQUEST);
-            }
             // Kiểm tra xem email đã hoàn thành xác thực chưa
             if (verificationService.isEmailVerified(verificationRequest.getEmail())) {
                 return new ResponseEntity<>("1010 | Email already verified", HttpStatus.CONFLICT);
             }
-
 
             // Kiểm tra thời gian giữa các request
             if (verificationService.isRequestTooFrequent(verificationRequest.getEmail())) {
@@ -46,7 +44,7 @@ public class VerificationController {
             String verifyCode = verificationService.generateVerifyCode(verificationRequest.getEmail());
 
             // Trả về mã xác thực thành công
-            return new ResponseEntity<>("1000 | OK - Verification token sent: " + verifyCode, HttpStatus.OK);
+            return ResponseEntity.ok().body(new Resource(ResponseCode.OK, verifyCode));
 
         } catch (Exception e) {
             return new ResponseEntity<>("Error during verification token generation: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
