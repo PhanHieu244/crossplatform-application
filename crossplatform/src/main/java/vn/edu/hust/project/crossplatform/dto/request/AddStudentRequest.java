@@ -17,5 +17,5 @@ public class AddStudentRequest extends TokenRequest{
     @NotNull
     private String classId;
     @NotNull
-    private Integer studentId;
+    private Integer accountId;
 }

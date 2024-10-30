@@ -58,7 +58,7 @@ public class VerificationController {
     }
 
     // API để kiểm tra mã xác thực
-    @PostMapping("/verify_code")
+    @PostMapping("/check_verify_code")
     public ResponseEntity<?> verifyCode(@RequestBody VerificationRequest verificationRequest) {
         // Kiểm tra email hợp lệ
         if (!isValidEmail(verificationRequest.getEmail())) {

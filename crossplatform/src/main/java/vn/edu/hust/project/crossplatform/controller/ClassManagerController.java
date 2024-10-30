@@ -24,7 +24,7 @@ public class ClassManagerController {
         classDetailService.addStudent(request);
         return ResponseEntity.ok().body(
                 new Resource(
-                        "add student id " + request.getStudentId() +
+                        "add student with account id " + request.getAccountId() +
                                 " to classId " + request.getClassId() + " success")
         );
     }

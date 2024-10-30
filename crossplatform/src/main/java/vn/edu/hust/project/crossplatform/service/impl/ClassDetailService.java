@@ -9,6 +9,7 @@ import vn.edu.hust.project.crossplatform.exception.base.ApplicationException;
 import vn.edu.hust.project.crossplatform.port.IClassDetailPort;
 import vn.edu.hust.project.crossplatform.port.IClassPort;
 import vn.edu.hust.project.crossplatform.port.IStudentPort;
+import vn.edu.hust.project.crossplatform.service.IAuthService;
 import vn.edu.hust.project.crossplatform.service.IClassDetailService;
 
 @Service
@@ -18,12 +19,14 @@ public class ClassDetailService implements IClassDetailService {
     private final IClassDetailPort classDetailPort;
     private final IClassPort classPort;
     private final IStudentPort studentPort;
+    private final IAuthService authService;
 
     @Override
     public void addStudent(AddStudentRequest addStudentRequest) {
         var classCode = addStudentRequest.getClassId();
         var classEntity = classPort.findClassByCode(classCode);
-        var student = studentPort.findStudentById(addStudentRequest.getStudentId());
+        var account = authService.getAccountById(addStudentRequest.getAccountId());
+        var student = studentPort.getStudent(account);
         if(classDetailPort.isStudentBelongToClass(student.getId(), classEntity.getId())){
             log.error("student already added in this class");
             throw new ApplicationException("student already added in this class");
@@ -32,6 +35,6 @@ public class ClassDetailService implements IClassDetailService {
             log.error("Class is max student amount exceeded");
             throw new ApplicationException(ResponseCode.ADD_STUDENT_ERROR ,"Class is max student amount exceeded");
         }
-        classDetailPort.addStudent(classEntity.getId(), addStudentRequest.getStudentId());
+        classDetailPort.addStudent(classEntity.getId(), student.getId());
     }
 }
