@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @MappedSuperclass
-public class BaseModel extends AuditTable{
+public class BaseModel extends AuditTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

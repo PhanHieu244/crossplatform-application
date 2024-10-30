@@ -17,6 +17,10 @@ public class Account {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
+    @Column(name = "ho")
+    private String ho;
+    @Column(name = "ten")
+    private String ten;
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -36,5 +40,17 @@ public class Account {
     @Column(name = "status", nullable = false)
     private String status = "Kích hoạt";  // Thiết lập giá trị mặc định trong Java
 
+    public enum Role {
+        LECTURER,
+        STUDENT
+    }
+
+    public enum Status {
+        KICH_HOAT,
+        BI_KHOA
+    }
+
+    @Column(name = "avatar")
+    private String avatar;
 
 }
