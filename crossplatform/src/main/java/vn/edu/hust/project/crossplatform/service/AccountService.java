@@ -23,9 +23,11 @@ public class AccountService {
         return accountRepository.existsByEmail(email);
     }
 
-    public String registerNewAccount(SignupRequest signupRequest) {
+    public Account registerNewAccount(SignupRequest signupRequest) {
         // Tạo account mới
         Account newAccount = new Account();
+        newAccount.setHo(signupRequest.getHo());
+        newAccount.setTen(signupRequest.getTen());
         newAccount.setEmail(signupRequest.getEmail());
         newAccount.setPassword(signupRequest.getPassword());  // Mã hóa mật khẩu
         newAccount.setName(signupRequest.getEmail());  // Name có thể là email hoặc tên đầy đủ
@@ -38,7 +40,7 @@ public class AccountService {
 
 
         // Trả về mã xác thực
-        return savedAccount.getToken();
+        return savedAccount;
     }
 
 
@@ -47,4 +49,6 @@ public class AccountService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
     }
+
+
 }

@@ -78,9 +78,9 @@ public class ClassService implements IClassService {
             var lecturerId = authService.getLecturerByAccount(account).getId();
             classList = classPort.getLecturerClasses(lecturerId);
         }
-        else if(account.getRole().equals(Account.Role.LECTURER.toString())){
-            var lecturerId = authService.getLecturerByAccount(account).getId();
-            classList = classPort.getStudentClasses(lecturerId);
+        else if(account.getRole().equals(Account.Role.STUDENT.toString())){
+            var studentId = authService.getStudentByAccount(account).getId();
+            classList = classPort.getStudentClasses(studentId);
         }
         else{
             log.error("your role cant access class list");

@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.edu.hust.project.crossplatform.dto.response.ApiResponse;
 import vn.edu.hust.project.crossplatform.dto.request.SignupRequest;
 import vn.edu.hust.project.crossplatform.service.AccountService;
+import vn.edu.hust.project.crossplatform.service.VerificationService;
+import vn.edu.hust.project.crossplatform.repository.mysql.model.Account;
 
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/it4788")
@@ -18,19 +21,36 @@ public class AuthController {
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private VerificationService verificationService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignupRequest signupRequest) {
-        // Validate email format
+        // Kiểm tra format email
         if (!isValidEmail(signupRequest.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(9995, "Invalid email format"));
         }
 
-        // Validate password length
-        if (signupRequest.getPassword().length() < 6 || signupRequest.getPassword().length() > 10) {
+        // Kiểm tra miền email
+        String email = signupRequest.getEmail();
+        if (!email.matches(".*@(?:hust\\.edu\\.vn|soict\\.hust\\.edu\\.vn)$")) {
+            return new ResponseEntity<>("1004 | Invalid domain, only hust.edu.vn or soict.hust.edu.vn is allowed", HttpStatus.BAD_REQUEST);
+        }
+
+        // Kiểm tra độ dài mật khẩu, trùng với email và ký tự đặc biệt
+        String password = signupRequest.getPassword();
+        if (password.length() < 6 || password.length() > 15) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(9994, "Password length must be between 6 and 10 characters"));
+        }
+        if (password.equals(email)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(9995, "Password should not be the same as email"));
+        }
+        if (!Pattern.matches("^[a-zA-Z0-9]*$", password)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(9995, "Password should not contain special characters"));
         }
 
         // Check if email already exists
@@ -39,9 +59,12 @@ public class AuthController {
                     .body(new ApiResponse(9996, "User existed"));
         }
 
-        // Register new account
-        String verificationCode = accountService.registerNewAccount(signupRequest);
-        return ResponseEntity.ok(new ApiResponse(1000, "OK", verificationCode));
+        // Đăng kí tài khoản
+        Account verificationCode = accountService.registerNewAccount(signupRequest);
+        // Xử lý logic tạo mã xác thực
+        String verifyCode = verificationService.generateVerifyCode(signupRequest.getEmail());
+        verificationCode.setToken(verifyCode); // Sinh mã token
+        return ResponseEntity.ok(new ApiResponse(1000, "OK", verifyCode));
     }
 
     private boolean isValidEmail(String email) {

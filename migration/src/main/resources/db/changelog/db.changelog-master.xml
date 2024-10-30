@@ -27,5 +27,11 @@
     <changeSet id="00009" author="phanhieu244">
         <sqlFile relativeToChangelogFile="true" path="../mysql/00009_messages.up.sql"/>
     </changeSet>
+    <changeSet id="00010" author="quan">
+        <sqlFile relativeToChangelogFile="true" path="../mysql/00010_update_accounts.up.sql"/>
+    </changeSet>
+    <changeSet id="00011" author="phanhieu244">
+        <sqlFile relativeToChangelogFile="true" path="../mysql/00011_fix_null_name_accounts.up.sql"/>
+    </changeSet>
 </databaseChangeLog>
  

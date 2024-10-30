@@ -42,6 +42,14 @@ public class VerificationService {
         return accountRepository.findByEmail(email) != null; // Trả về true nếu email tồn tại
     }
 
+    public boolean checkPassword(String email, String password) {
+        Account account = accountRepository.findByEmail(email); // Trả về true nếu email tồn tại
+        if(account.getPassword().equals(password)){
+            return true;
+        }
+        return false;
+    }
+
     // Kiểm tra nếu email đã được xác thực (trạng thái 'Kích hoạt')
     public boolean isEmailVerified(String email) {
         return accountRepository.existsByEmailAndStatus(email, "Kích hoạt");
@@ -126,5 +134,3 @@ public class VerificationService {
         }
     }
 }
-
-

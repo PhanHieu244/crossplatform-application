@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vn.edu.hust.project.crossplatform.constant.ResponseCode;
 import vn.edu.hust.project.crossplatform.dto.request.VerificationRequest;
+import vn.edu.hust.project.crossplatform.dto.response.Resource;
 import vn.edu.hust.project.crossplatform.dto.response.VerificationResponse;
 import vn.edu.hust.project.crossplatform.service.VerificationService;
 
@@ -22,20 +24,12 @@ public class VerificationController {
     @PostMapping("/get_verify_code")
     public ResponseEntity<?> getVerifyCode(@RequestBody VerificationRequest verificationRequest) {
         try {
-            // Kiểm tra định dạng email
-            if (!isValidEmail(verificationRequest.getEmail())) {
-                return new ResponseEntity<>("1004 | Invalid email format", HttpStatus.BAD_REQUEST);
-            }
-
-            // Kiểm tra xem email có thuộc domain hust.edu.vn không
-            if (!verificationRequest.getEmail().endsWith("@hust.edu.vn")) {
-                return new ResponseEntity<>("1004 | Invalid domain, only hust.edu.vn is allowed", HttpStatus.BAD_REQUEST);
-            }
 
             // Kiểm tra xem email đã được đăng ký chưa
             if (!verificationService.isEmailRegistered(verificationRequest.getEmail())) {
                 return new ResponseEntity<>("9995 | Email not registered", HttpStatus.BAD_REQUEST);
             }
+
             // Kiểm tra xem email đã hoàn thành xác thực chưa
             if (verificationService.isEmailVerified(verificationRequest.getEmail())) {
                 return new ResponseEntity<>("1010 | Email already verified", HttpStatus.CONFLICT);
@@ -50,10 +44,10 @@ public class VerificationController {
             String verifyCode = verificationService.generateVerifyCode(verificationRequest.getEmail());
 
             // Trả về mã xác thực thành công
-            return new ResponseEntity<>("1000 | OK - Verification code sent: " + verifyCode, HttpStatus.OK);
+            return ResponseEntity.ok().body(new Resource(ResponseCode.OK, verifyCode));
 
         } catch (Exception e) {
-            return new ResponseEntity<>("Error during verification code generation: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error during verification token generation: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -64,7 +58,7 @@ public class VerificationController {
     }
 
     // API để kiểm tra mã xác thực
-    @PostMapping("/verify_code")
+    @PostMapping("/check_verify_code")
     public ResponseEntity<?> verifyCode(@RequestBody VerificationRequest verificationRequest) {
         // Kiểm tra email hợp lệ
         if (!isValidEmail(verificationRequest.getEmail())) {
@@ -72,7 +66,7 @@ public class VerificationController {
         }
 
         // Kiểm tra nếu không truyền mã xác thực
-        if (verificationRequest.getCode() == null || verificationRequest.getCode().isEmpty()) {
+        if (verificationRequest.getVerifyCode() == null || verificationRequest.getVerifyCode().isEmpty()) {
             return new ResponseEntity<>("1002 | Verification code is missing", HttpStatus.BAD_REQUEST);
         }
 
@@ -83,11 +77,11 @@ public class VerificationController {
 
         // Kiểm tra nếu email đã được xác thực trước đó
         if (verificationService.isEmailVerified(verificationRequest.getEmail())) {
-            return new ResponseEntity<>("9996 | Email already verified", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("1010 | Email already verified", HttpStatus.CONFLICT);
         }
 
         // Kiểm tra mã xác thực có hợp lệ và đúng với email được gửi
-        if (!verificationService.isValidVerificationCode(verificationRequest.getEmail(), verificationRequest.getCode())) {
+        if (!verificationService.isValidVerificationCode(verificationRequest.getEmail(), verificationRequest.getVerifyCode())) {
             return new ResponseEntity<>("1004 | Invalid verification code or email mismatch", HttpStatus.BAD_REQUEST);
         }
 
