@@ -11,6 +11,7 @@ import vn.edu.hust.project.crossplatform.dto.request.EditClassRequest;
 import vn.edu.hust.project.crossplatform.exception.NoDataException;
 import vn.edu.hust.project.crossplatform.exception.UnauthorizedException;
 import vn.edu.hust.project.crossplatform.exception.base.ApplicationException;
+import vn.edu.hust.project.crossplatform.port.IAssignmentPort;
 import vn.edu.hust.project.crossplatform.port.IClassPort;
 import vn.edu.hust.project.crossplatform.repository.mysql.IClassDetailRepository;
 import vn.edu.hust.project.crossplatform.repository.mysql.IClassRepository;
@@ -26,6 +27,7 @@ import java.util.List;
 public class ClassAdapter implements IClassPort {
     private final IClassRepository classRepository;
     private final IClassDetailRepository classDetailRepository;
+    private final IAssignmentPort assignmentPort;
 
     @Override
     public ClassDto createClass(ClassDto classDto) {
@@ -101,7 +103,13 @@ public class ClassAdapter implements IClassPort {
     @Override
     public void deleteClass(String code) {
         var existingClass = getClassModelByCode(code);
-        classRepository.delete(existingClass);
+        try {
+            classRepository.delete(existingClass);
+        }
+        catch (Exception e) {
+            log.error("cant delete class {}, err:{}", code, e.getMessage());
+            throw new ApplicationException(ResponseCode.EXCEPTION_ERROR, e.getMessage());
+        }
     }
 
     private ClassModel getClassModelByCode(String code) {
